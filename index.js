@@ -5,6 +5,8 @@ const dotenv = require("dotenv");
 dotenv.config();
 const authRoute = require("./routes").auth;
 const cors = require("cors");
+const passport = require("passport");
+require("./config/passport")(passport);
 
 // mongodb atlas connect
 mongoose.connect(process.env.DB_CONNECT, {

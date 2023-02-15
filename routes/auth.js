@@ -40,26 +40,31 @@ router.post("/register", async(req, res) => {
     }
 });
 
-router.post("/login", (req, res) => {
+router.post("/login" , (req , res) => {
+    // check the validation of data 檢查是否符合schema 格式
     const {error} = loginValidation(req.body);
-    if(error) return res.status(400).send(error.details[0].message);
-    User.findOne({email:req.body.email},function(err,user){
+    if(error) return res.status(400).send(error.datails[0].message);
+
+    User.findOne({email:req.body.email} , function(err , user) {
         if(err) {
-            res.status(400).send("無法找到使用者帳戶");
-        }else{
-            user.comparePassword(req.body.password, function(err, isMatch) {
-                if(err) return res.status(400).send(err);
-                if(isMatch) {
-                    const tokenObject = {_id:user._id, email:user.email};
-                    const token = jwt.sign(tokenObject,process.env.PASSPORT_SECRET);
-                    res.send({success:true, token:"JWT" + token,user})
-                } else {
-                    console.log(err);
+            res.status(400).send(err);
+        }
+        if(!user) {
+            res.status(401).send("無此使用者");
+        } else {
+            user.comparePassword(req.body.password , function(err , isMatch) {
+                if (err) return res.status(400).send(err);
+                if (isMatch) {
+                    const tokenObject = {_id: user._id , email: user.email };
+                    const token = jwt.sign(tokenObject , process.env.PASSPORT_SECRET);
+                    res.send({ success: true , token: "JWT " + token , user});
+                }else {
                     res.status(401).send("密碼錯誤");
                 }
             });
         }
-    });
+        
+    });    
 });
 
 module.exports = router;
