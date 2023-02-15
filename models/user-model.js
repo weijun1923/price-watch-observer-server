@@ -40,7 +40,7 @@ userSchema.pre("save" , async function(next) {
 });
 
 // 登入時密碼比對
-userSchema.methods.comparsPassword = function(password, cb) {
+userSchema.methods.comparePassword = function(password, cb) {
     // 使用者密碼 與 資料庫密碼比對
     bcrypt.compare(password, this.password,(err, isMatch) => {
         if(err) {
