@@ -26,6 +26,11 @@ app.use(cors());
 // loing and register middleware
 app.use("/api/user" , authRoute);
 
+app.head("/" , (req , res) => {
+    res.status(200).end();
+    console.log("--- UptimeRobot wakeup request ---");
+});
+
 // listen
 const port = process.env.PORT || 8080;
 app.listen(port, () =>{
